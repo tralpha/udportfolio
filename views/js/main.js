@@ -448,12 +448,15 @@ var resizePizzas = function(size) {
     return dx;
   }
 
+  //Declare variables to be used in changePizzaSizes and determineDx to avoid code repetition
+  var randomPizzaContainers = document.querySelectorAll(".randomPizzaContainer")
+
   // Iterates through pizza elements on the page and changes their widths
   function changePizzaSizes(size) {
-    for (var i = 0; i < document.querySelectorAll(".randomPizzaContainer").length; i++) {
-      var dx = determineDx(document.querySelectorAll(".randomPizzaContainer")[i], size);
-      var newwidth = (document.querySelectorAll(".randomPizzaContainer")[i].offsetWidth + dx) + 'px';
-      document.querySelectorAll(".randomPizzaContainer")[i].style.width = newwidth;
+    for (var i = 0; i < randomPizzaContainers.length; i++) {
+      var dx = determineDx(randomPizzaContainers[i], size);
+      var newwidth = (document.randomPizzaContainers[i].offsetWidth + dx) + 'px';
+      randomPizzaContainers[i].style.width = newwidth;
     }
   }
 
@@ -503,9 +506,11 @@ function updatePositions() {
   window.performance.mark("mark_start_frame");
 
   var items = document.querySelectorAll('.mover');
+  //Putting this variable outside the loop will dramatically improve the frame per second
+  var cachedScrollTop = document.body.scrollTop;
   for (var i = 0; i < items.length; i++) {
-    //var phase =  1//Math.sin((document.body.scrollTop / 1250) + (i % 5));
-    items[i].style.left = items[i].basicLeft + 100 + 'px';
+    var phase = Math.sin((cachedScrollTop / 1250) + (i % 5));
+    items[i].style.left = items[i].basicLeft + 100 * phase + 'px';
   }
 
   // User Timing API to the rescue again. Seriously, it's worth learning.
